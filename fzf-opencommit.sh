@@ -79,7 +79,7 @@ function fzf-opencommit() {
   }
 
   ######################
-  ### OpenCommit - Config
+  ### OpenCommit - Config - Entry Point
   ######################
 
   local __fzf-opencommit-config() {
@@ -144,6 +144,32 @@ function fzf-opencommit() {
     return 0
   }
 
+  ######################
+  ### OpenCommit - Config - AI Provider
+  ######################
+
+  local __fzf-opencommit-config-ai-provider() {
+    local current_value=$(__get_config "OCO_AI_PROVIDER" "ollama")
+    local option_list=(
+        "anthropic"
+        "azure"
+        "ollama"
+    )
+    option_list+=($(ollama list | awk 'NR>1 {print $1}' | sort -f))
+    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_AI_PROVIDER=<VALUE> (current value: ${current_value}) > ")
+    if [ -n "${selected_value}" ]; then
+        oco config set OCO_AI_PROVIDER=${selected_value}
+        return 0
+    else
+        echo "No value selected."
+        return 1
+    fi
+  }
+
+  ######################
+  ### OpenCommit - Config - Open AI
+  ######################
+
   local __fzf-opencommit-config-openai-api-key() {
     local current_value=$(__get_config "OCO_OPENAI_API_KEY" "undefined")
     local selected_value=$(fzf --ansi --pointer="" --no-mouse --marker="" --disabled --print-query --no-separator --no-info --layout=reverse-list --height=~100% --prompt="oco config set OCO_OPENAI_API_KEY=<VALUE> (current value: ${current_value}) > ")
@@ -190,6 +216,10 @@ function fzf-opencommit() {
     fi
   }
 
+  ######################
+  ### OpenCommit - Config - Anthropic
+  ######################
+
   local __fzf-opencommit-config-anthropic-api-key() {
     local current_value=$(__get_config "OCO_ANTHROPIC_API_KEY" "undefined")
     local selected_value=$(fzf --ansi --pointer="" --no-mouse --marker="" --disabled --print-query --no-separator --no-info --layout=reverse-list --height=~100% --prompt="oco config set OCO_ANTHROPIC_API_KEY=<VALUE> (current value: ${current_value}) > ")
@@ -200,6 +230,10 @@ function fzf-opencommit() {
       return 1
     fi
   }
+
+  ######################
+  ### OpenCommit - Config - Azure
+  ######################
 
   local __fzf-opencommit-config-azure-api-key() {
     local current_value=$(__get_config "OCO_AZURE_API_KEY" "undefined")
@@ -224,6 +258,10 @@ function fzf-opencommit() {
     fi
   }
 
+  ######################
+  ### OpenCommit - Config - Gemini
+  ######################
+
   local __fzf-opencommit-config-gemini-api-key() {
     local current_value=$(__get_config "OCO_GEMINI_API_KEY" "undefined")
     local selected_value=$(fzf --ansi --pointer="" --no-mouse --marker="" --disabled --print-query --no-separator --no-info --layout=reverse-list --height=~100% --prompt="oco config set OCO_GEMINI_API_KEY=<VALUE> (current value: ${current_value}) > ")
@@ -246,6 +284,10 @@ function fzf-opencommit() {
       return 1
     fi
   }
+
+  ######################
+  ### OpenCommit - Config - Flowise
+  ######################
 
   local __fzf-opencommit-config-flowise-api-key() {
     local current_value=$(__get_config "OCO_FLOWISE_API_KEY" "undefined")
@@ -270,6 +312,10 @@ function fzf-opencommit() {
     fi
   }
 
+  ######################
+  ### OpenCommit - Config - Ollama
+  ######################
+
   local __fzf-opencommit-config-ollama-api-url() {
     local current_value=$(__get_config "OCO_OLLAMA_API_URL" "undefined")
     local selected_value=$(fzf --ansi --pointer="" --no-mouse --marker="" --disabled --print-query --no-separator --no-info --layout=reverse-list --height=~100% --prompt="oco config set OCO_OLLAMA_API_URL=<VALUE> (current value: ${current_value}) > ")
@@ -280,6 +326,10 @@ function fzf-opencommit() {
       return 1
     fi
   }
+
+  ######################
+  ### OpenCommit - Config - Tokens
+  ######################
 
   local __fzf-opencommit-config-tokens-max-input() {
     local current_value=$(__get_config "OCO_TOKENS_MAX_INPUT" "4096")
@@ -315,38 +365,9 @@ function fzf-opencommit() {
     fi
   }
 
-  local __fzf-opencommit-config-description() {
-    local current_value=$(__get_config "OCO_DESCRIPTION" "false")
-    local option_list=(
-        "true"
-        "false"
-    )
-    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_DESCRIPTION=<VALUE> (current value: ${current_value}) > ")
-    if [ -n "${selected_value}" ]; then
-        oco config set OCO_DESCRIPTION=${selected_value}
-        return 0
-    else
-        echo "No value selected."
-        return 1
-    fi
-  }
-
-  local __fzf-opencommit-config-emoji() {
-    BUFFER="OCO_EMOJI='<BOOLEAN>' opencommit"
-    local current_value=$(__get_config "OCO_EMOJI" "false")
-    local option_list=(
-        "true"
-        "false"
-    )
-    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_EMOJI=<VALUE> (current value: ${current_value}) > ")
-    if [ -n "${selected_value}" ]; then
-        oco config set OCO_EMOJI=${selected_value}
-        return 0
-    else
-        echo "No value selected."
-        return 1
-    fi
-  }
+  ######################
+  ### OpenCommit - Config - Misc
+  ######################
 
   local __fzf-opencommit-config-language() {
     local current_value=$(__get_config "OCO_LANGUAGE" "en")
@@ -382,6 +403,71 @@ function fzf-opencommit() {
     fi
   }
 
+  local __fzf-opencommit-config-description() {
+    local current_value=$(__get_config "OCO_DESCRIPTION" "false")
+    local option_list=(
+        "true"
+        "false"
+    )
+    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_DESCRIPTION=<VALUE> (current value: ${current_value}) > ")
+    if [ -n "${selected_value}" ]; then
+        oco config set OCO_DESCRIPTION=${selected_value}
+        return 0
+    else
+        echo "No value selected."
+        return 1
+    fi
+  }
+
+  local __fzf-opencommit-config-one-line-commit() {
+    local current_value=$(__get_config "OCO_ONE_LINE_COMMIT" "false")
+    local option_list=(
+        "true"
+        "false"
+    )
+    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_ONE_LINE_COMMIT=<VALUE> (current value: ${current_value}) > ")
+    if [ -n "${selected_value}" ]; then
+        oco config set OCO_ONE_LINE_COMMIT=${selected_value}
+        return 0
+    else
+        echo "No value selected."
+        return 1
+    fi
+  }
+
+  local __fzf-opencommit-config-emoji() {
+    BUFFER="OCO_EMOJI='<BOOLEAN>' opencommit"
+    local current_value=$(__get_config "OCO_EMOJI" "false")
+    local option_list=(
+        "true"
+        "false"
+    )
+    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_EMOJI=<VALUE> (current value: ${current_value}) > ")
+    if [ -n "${selected_value}" ]; then
+        oco config set OCO_EMOJI=${selected_value}
+        return 0
+    else
+        echo "No value selected."
+        return 1
+    fi
+  }
+
+  local __fzf-opencommit-config-git-push() {
+    local current_value=$(__get_config "OCO_GITPUSH" "true")
+    local option_list=(
+        "true"
+        "false"
+    )
+    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_GITPUSH=<VALUE> (current value: ${current_value}) > ")
+    if [ -n "${selected_value}" ]; then
+        oco config set OCO_GITPUSH=${selected_value}
+        return 0
+    else
+        echo "No value selected."
+        return 1
+    fi
+  }
+
   local __fzf-opencommit-config-message-template-placeholder() {
     local current_value=$(__get_config "OCO_MESSAGE_TEMPLATE_PLACEHOLDER" "conventional-commit")
     local selected_value=$(fzf --ansi --pointer="" --no-mouse --marker="" --disabled --print-query --no-separator --no-info --layout=reverse-list --height=~100% --prompt="oco config set OCO_MESSAGE_TEMPLATE_PLACEHOLDER=<VALUE> (current value: ${current_value}) > ")
@@ -410,55 +496,9 @@ function fzf-opencommit() {
     fi
   }
 
-  local __fzf-opencommit-config-one-line-commit() {
-    local current_value=$(__get_config "OCO_ONE_LINE_COMMIT" "false")
-    local option_list=(
-        "true"
-        "false"
-    )
-    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_ONE_LINE_COMMIT=<VALUE> (current value: ${current_value}) > ")
-    if [ -n "${selected_value}" ]; then
-        oco config set OCO_ONE_LINE_COMMIT=${selected_value}
-        return 0
-    else
-        echo "No value selected."
-        return 1
-    fi
-  }
-
-  local __fzf-opencommit-config-ai-provider() {
-    local current_value=$(__get_config "OCO_AI_PROVIDER" "ollama")
-    local option_list=(
-        "anthropic"
-        "azure"
-        "ollama"
-    )
-    option_list+=($(ollama list | awk 'NR>1 {print $1}' | sort -f))
-    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_AI_PROVIDER=<VALUE> (current value: ${current_value}) > ")
-    if [ -n "${selected_value}" ]; then
-        oco config set OCO_AI_PROVIDER=${selected_value}
-        return 0
-    else
-        echo "No value selected."
-        return 1
-    fi
-  }
-
-  local __fzf-opencommit-config-git-push() {
-    local current_value=$(__get_config "OCO_GITPUSH" "true")
-    local option_list=(
-        "true"
-        "false"
-    )
-    local selected_value=$(printf "%s\n" "${option_list[@]}" | fzf --ansi --prompt="oco config set OCO_GITPUSH=<VALUE> (current value: ${current_value}) > ")
-    if [ -n "${selected_value}" ]; then
-        oco config set OCO_GITPUSH=${selected_value}
-        return 0
-    else
-        echo "No value selected."
-        return 1
-    fi
-  }
+  ######################
+  ### OpenCommit - Config - Print Config
+  ######################
 
   local __fzf-opencommit-config-print-config() {
     if [ -f ~/.opencommit ]; then
