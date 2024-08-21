@@ -141,6 +141,9 @@ function fzf-opencommit() {
       "Print Configurations")             __fzf-opencommit-config-print-config;;
       *)                                  BUFFER="echo \"Error: Unknown command '$command\"";;
     esac
+    if [ -f ~/.opencommit ]; then
+        sort -f ~/.opencommit -o ~/.opencommit
+    fi
     return 0
   }
 
