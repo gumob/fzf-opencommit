@@ -49,6 +49,34 @@ function fzf-opencommit() {
   }
 
   ######################
+  ### Print Conventional Commit Types
+  ######################
+
+  local __print_conventional_commit_types() {
+    echo "
+$(tput bold)Quick Examples$(tput sgr0)
+  $(tput bold)feat$(tput sgr0):            New feature
+  $(tput bold)feat!$(tput sgr0):           Breaking change
+  $(tput bold)feat(scope)!$(tput sgr0):    Rework API
+  $(tput bold)fix(scope)$(tput sgr0):      Bug in scope
+  $(tput bold)chore(deps)$(tput sgr0):     update dependencies
+
+$(tput bold)Commit Types$(tput sgr0)
+  $(tput bold)build$(tput sgr0):           Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+  $(tput bold)ci$(tput sgr0):              Changes to CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+  $(tput bold)chore$(tput sgr0):           Changes which doesn't change source code or tests e.g. changes to the build process, auxiliary tools, libraries
+  $(tput bold)docs$(tput sgr0):            Documentation only changes
+  $(tput bold)feat$(tput sgr0):            A new feature
+  $(tput bold)fix$(tput sgr0):             A bug fix
+  $(tput bold)perf$(tput sgr0):            A code change that improves performance
+  $(tput bold)refactor$(tput sgr0):        A code change that neither fixes a bug nor adds a feature
+  $(tput bold)revert$(tput sgr0):          Revert something
+  $(tput bold)style$(tput sgr0):           Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
+  $(tput bold)test$(tput sgr0):            Adding missing tests or correcting existing tests
+"
+  }
+
+  ######################
   ### Config Loader
   ######################
 
@@ -71,10 +99,12 @@ function fzf-opencommit() {
   ######################
 
   local __fzf-opencommit-commit() {
+    __print_conventional_commit_types
     BUFFER="opencommit"
   }
 
   local __fzf-opencommit-commit-dry-run() {
+    __print_conventional_commit_types
     BUFFER="opencommit --dry-run"
   }
 
