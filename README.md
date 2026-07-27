@@ -17,10 +17,10 @@ This is a shell plugin that allows you to execute [`opencommit`](https://github.
 
 ## Installation
 
-### Download [fzf-opencommit](https://github.com/gumob/fzf-opencommit) to your home directory
+### Download [fzf-opencommit](https://github.com/futamura/fzf-opencommit) to your home directory
 
 ```shell
-wget -O ~/.fzfopencommit https://raw.githubusercontent.com/gumob/fzf-opencommit/main/fzf-opencommit.sh
+wget -O ~/.fzfopencommit https://raw.githubusercontent.com/futamura/fzf-opencommit/main/fzf-opencommit.sh
 ```
 
 ### Using key bindings
